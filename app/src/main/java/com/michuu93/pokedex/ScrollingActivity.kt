@@ -3,6 +3,7 @@ package com.michuu93.pokedex
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_scrolling.*
@@ -17,6 +18,10 @@ class ScrollingActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+
+        val pokemons = PokemonApiClient().getPokemons(1)
+        Log.d("POKEMON", "POKEMON!!")
+        Log.d("POKEMON", "POKEMON >> ${pokemons.toString()}")
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
