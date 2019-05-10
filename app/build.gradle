@@ -41,6 +41,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.squareup.okhttp3:okhttp:3.14.1'
     implementation "com.apollographql.apollo:apollo-runtime:$apollo_version"
-    implementation "com.apollographql.apollo:apollo-rx2-support:$apollo_version"
     implementation "com.apollographql.apollo:apollo-http-cache:$apollo_version"
 }

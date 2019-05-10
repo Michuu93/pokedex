@@ -1,6 +1,7 @@
 package com.michuu93.pokedex
 
 import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.ApolloQueryCall
 import com.apollographql.apollo.api.Operation
 import com.apollographql.apollo.api.ResponseField
 import com.apollographql.apollo.cache.normalized.CacheKey
@@ -8,11 +9,7 @@ import com.apollographql.apollo.cache.normalized.CacheKeyResolver
 import com.apollographql.apollo.cache.normalized.NormalizedCacheFactory
 import com.apollographql.apollo.cache.normalized.lru.EvictionPolicy
 import com.apollographql.apollo.cache.normalized.lru.LruNormalizedCacheFactory
-import com.apollographql.apollo.rx2.Rx2Apollo
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
-
 
 class PokemonApiClient {
     private var cacheFactory: NormalizedCacheFactory<*> =
@@ -42,15 +39,9 @@ class PokemonApiClient {
         .okHttpClient(OkHttpClient.Builder().build())
         .build()
 
-    fun getPokemons(first: Int): Single<Pokemons.Data>? =
-        Rx2Apollo.from(apolloClient.query(Pokemons.builder().first(first).build()))
-            .subscribeOn(Schedulers.io())
-            .map { it.toData() }
-            .singleOrError()
+    fun getPokemons(first: Int): ApolloQueryCall<Pokemons.Data> =
+        apolloClient.query(Pokemons.builder().first(first).build())
 
-    private fun <T> com.apollographql.apollo.api.Response<T>.toData(): T =
-        if (hasErrors()) throw ResponseException(errors())
-        else data() ?: throw NullPointerException()
-
-    class ResponseException(errors: List<com.apollographql.apollo.api.Error>) : Exception(errors.toString())
+    fun getPokemon(name: String): ApolloQueryCall<Pokemon.Data> =
+        apolloClient.query(Pokemon.builder().name(name).build())
 }

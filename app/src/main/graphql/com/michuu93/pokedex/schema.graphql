@@ -1,16 +1,22 @@
 query Pokemons($first: Int!) {
     pokemons(first: $first) {
-        ...Pokemon
+        ...PokemonSimple
     }
 }
 
-query Pokemon($id: String, $name: String) {
-    pokemon(id: $id, name: $name) {
-        ...Pokemon
+query Pokemon($name: String) {
+    pokemon(name: $name) {
+        ...PokemonDetailed
     }
 }
 
-fragment Pokemon on Pokemon {
+fragment PokemonSimple on Pokemon {
+    id
+    name
+    image
+}
+
+fragment PokemonDetailed on Pokemon {
     id
     number
     name
