@@ -12,7 +12,8 @@ import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
 import kotlinx.android.synthetic.main.activity_scrolling.*
 import android.view.View
-
+import com.bumptech.glide.Glide
+import android.widget.ImageView
 
 class ScrollingActivity : AppCompatActivity() {
 
@@ -28,33 +29,34 @@ class ScrollingActivity : AppCompatActivity() {
         PokemonApiClient().getPokemons(1).enqueue(
                 object : ApolloCall.Callback<Pokemons.Data>() {
                     override fun onResponse(response: Response<Pokemons.Data>) {
-                        val pokemons = response.data()?.pokemons?.toString()
-                        Log.d("POKEMON", pokemons)
-                        val textView = findViewById<View>(R.id.scroll_content) as TextView
-                        setText(textView, pokemons)
+                        val pokemons = response.data()?.pokemons
+                        Log.d("POKEMONS", pokemons?.toString())
+                        val name = pokemons?.get(0)?.fragments()?.pokemonSimple?.name()
+                        drawPokemon(name)
                     }
                     override fun onFailure(e: ApolloException) {
                         //throw error
                     }
                 }
             )
+    }
 
-        //for tests
-        PokemonApiClient().getPokemon("Pikachu").enqueue(
+    private fun drawPokemon(name: String?) {
+        PokemonApiClient().getPokemon(name!!).enqueue(
             object : ApolloCall.Callback<Pokemon.Data>() {
                 override fun onResponse(response: Response<Pokemon.Data>) {
-                    val pokemon = response.data()?.pokemon?.toString()
-                    Log.d("POKEMON", pokemon)
-                    val textView = findViewById<View>(R.id.scroll_content) as TextView
-                    setText(textView, pokemon)
+                    val pokemon = response.data()?.pokemon
+                    Log.d("POKEMON", pokemon?.toString())
+                    val textView = findViewById<View>(R.id.name) as TextView
+                    setText(textView, pokemon?.toString())
+                    val imageView = findViewById<View>(R.id.image) as ImageView
+                    runOnUiThread{ Glide.with(imageView).load(     pokemon?.fragments()?.pokemonDetailed?.image()   ).into(imageView)}
                 }
                 override fun onFailure(e: ApolloException) {
                     //throw error
                 }
             }
         )
-
-
     }
 
     private fun setText(text: TextView, value: String?) {
