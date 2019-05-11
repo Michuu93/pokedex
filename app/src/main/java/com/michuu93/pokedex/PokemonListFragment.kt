@@ -4,23 +4,22 @@ import android.os.Bundle
 import android.support.v4.app.ListFragment
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import com.apollographql.apollo.ApolloCall
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
-import kotlin.collections.ArrayList
+import com.michuu93.pokedex.fragment.PokemonSimple
 
 class PokemonListFragment : ListFragment() {
-    private var pokemons: ArrayList<String> = arrayListOf()
-    private lateinit var adapter: ArrayAdapter<String>
+    private var pokemons: ArrayList<PokemonSimple> = arrayListOf()
+    private lateinit var adapter: PokemonAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
 
         context.let {
-            adapter = ArrayAdapter(it!!, android.R.layout.simple_list_item_1, pokemons)
+            adapter = PokemonAdapter(it!!, pokemons)
         }
 
         loadPokemons()
@@ -38,10 +37,9 @@ class PokemonListFragment : ListFragment() {
                         pokemon.fragments().pokemonSimple
                     }!!
                     activity!!.runOnUiThread {
-                        val pokemonsOnlyNames = pokemons.map { pokemonSimple -> pokemonSimple.name() }.requireNoNulls().toList()
                         adapter.clear()
-                        adapter.addAll(pokemonsOnlyNames)
-                        Log.d("POKEMONS UPDATED", pokemonsOnlyNames.toString())
+                        adapter.addAll(pokemons)
+                        Log.d("POKEMONS UPDATED", pokemons.toString())
                     }
                 }
 
