@@ -37,10 +37,10 @@
 
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>
-        <fragment
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" android:name="com.michuu93.pokedex.PokemonListFragment"
-                android:id="@+id/pokemon_list_fragment"/>
-    </LinearLayout>
 
+        <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
