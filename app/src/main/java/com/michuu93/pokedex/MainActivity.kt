@@ -10,13 +10,14 @@ import android.view.MenuItem
 import com.michuu93.pokedex.fragment.PokemonSimple
 import kotlinx.android.synthetic.main.main_activity.*
 
+
 class MainActivity : AppCompatActivity() {
     private var pokemonHelper: PokemonHelper = PokemonHelper(PokemonApiClient())
     private var pokemons: ArrayList<PokemonSimple> = arrayListOf()
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: PokemonViewAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
-
+    private var loadCount = 10
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,12 +31,25 @@ class MainActivity : AppCompatActivity() {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
+            addOnScrollListener(createOnScrollListener())
         }
-        initialLoad()
+        loadPokemons()
     }
 
-    private fun initialLoad() {
-        pokemonHelper.getPokemons(10) {
+    private fun createOnScrollListener(): RecyclerView.OnScrollListener {
+        return object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1)) {
+                    loadCount += 10
+                    loadPokemons()
+                }
+            }
+        }
+    }
+
+    private fun loadPokemons() {
+        pokemonHelper.getPokemons(loadCount) {
             it?.let { pokemonsList ->
                 runOnUiThread {
                     pokemons.clear()
