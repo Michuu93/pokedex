@@ -8,10 +8,17 @@
         android:fitsSystemWindows="true"
         tools:context=".MainActivity">
 
+    <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:layout_anchorGravity="bottom|center" app:layout_anchor="@+id/linearLayout"/>
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent" android:id="@+id/linearLayout">
         <android.support.design.widget.AppBarLayout
                 android:id="@+id/app_bar"
                 android:fitsSystemWindows="true"
@@ -41,6 +48,7 @@
         <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" android:scrollbars="vertical"/>
+
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

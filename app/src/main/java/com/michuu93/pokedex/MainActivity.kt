@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.michuu93.pokedex.fragment.PokemonSimple
 import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.android.synthetic.main.pokemon_view_holder.view.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: PokemonViewAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var progressBar: ProgressBar
     private var loadCount = 10
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         viewManager = LinearLayoutManager(this)
-        viewAdapter = PokemonViewAdapter(pokemons)
+        viewAdapter = PokemonViewAdapter(pokemons, createOnClickListener())
 
         recyclerView = findViewById<RecyclerView>(R.id.recycler_view).apply {
             setHasFixedSize(true)
@@ -33,6 +35,9 @@ class MainActivity : AppCompatActivity() {
             adapter = viewAdapter
             addOnScrollListener(createOnScrollListener())
         }
+
+        progressBar = findViewById(R.id.progress_bar)
+
         loadPokemons()
     }
 
@@ -48,13 +53,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun createOnClickListener(): View.OnClickListener {
+        return View.OnClickListener {
+            Log.d("OnClickListener", it.name.text.toString())
+        }
+    }
+
     private fun loadPokemons() {
+        progressBar.visibility = View.VISIBLE
         pokemonHelper.getPokemons(loadCount) {
             it?.let { pokemonsList ->
                 runOnUiThread {
                     pokemons.clear()
                     pokemons.addAll(pokemonsList)
                     viewAdapter.notifyDataSetChanged()
+                    progressBar.visibility = View.GONE
                 }
             }
             Log.d("POKEMONS", it.toString())

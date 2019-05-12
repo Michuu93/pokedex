@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.michuu93.pokedex.fragment.PokemonSimple
 import kotlinx.android.synthetic.main.pokemon_view_holder.view.*
 
-class PokemonViewAdapter(private val pokemons: ArrayList<PokemonSimple>) :
+class PokemonViewAdapter(private val pokemons: ArrayList<PokemonSimple>,  private val onClickListener: View.OnClickListener) :
     RecyclerView.Adapter<PokemonViewAdapter.PokemonViewHolder>() {
 
     class PokemonViewHolder(view: View) : RecyclerView.ViewHolder(view)
@@ -20,6 +20,7 @@ class PokemonViewAdapter(private val pokemons: ArrayList<PokemonSimple>) :
         val pokemon = pokemons[position]
         Glide.with(holder.itemView.context).load(pokemon.image()).into(holder.itemView.image)
         holder.itemView.name.text = pokemon.name()
+        holder.itemView.setOnClickListener(onClickListener)
     }
 
     override fun getItemCount(): Int {
