@@ -4,51 +4,34 @@ import android.util.Log
 import com.apollographql.apollo.ApolloCall
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.exception.ApolloException
+import com.michuu93.pokedex.fragment.PokemonDetailed
 import com.michuu93.pokedex.fragment.PokemonSimple
 
-class PokemonHelper {
+class PokemonHelper constructor(private val apiClient: PokemonApiClient) {
 
-    fun getPokemons(first: Int): List<PokemonSimple> {
-        var pokemons: List<PokemonSimple> = emptyList()
-        PokemonApiClient().getPokemons(first).enqueue(
+    fun getPokemons(first: Int, callback: (List<PokemonSimple>?) -> Unit) {
+        apiClient.getPokemons(first).enqueue(
             object : ApolloCall.Callback<Pokemons.Data>() {
                 override fun onResponse(response: Response<Pokemons.Data>) {
-                    pokemons = response.data()?.pokemons?.map { pokemon ->
-                        pokemon.fragments().pokemonSimple
-                    }!!
-
-                    Log.d("POKEMONS", pokemons.toString())
+                    callback(response.data()?.pokemons?.map { pokemon -> pokemon.fragments().pokemonSimple })
                 }
 
                 override fun onFailure(e: ApolloException) {
-                    //throw error
+                    Log.e("POKEMON API", e.toString())
                 }
             })
-
-        return pokemons
     }
 
-    //
-//    private fun drawPokemon(name: String?) {
-//        PokemonApiClient().getPokemon(name!!).enqueue(
-//            object : ApolloCall.Callback<Pokemon.Data>() {
-//                override fun onResponse(response: Response<Pokemon.Data>) {
-//                    val pokemon = response.data()?.pokemon
-//                    Log.d("POKEMON", pokemon?.toString())
-//                    val textView = findViewById<View>(R.id.name) as TextView
-//                    setText(textView, pokemon?.toString())
-//                    val imageView = findViewById<View>(R.id.image) as ImageView
-//                    runOnUiThread{ Glide.with(imageView).loadPokemons(     pokemon?.fragments()?.pokemonDetailed?.image()   ).into(imageView)}
-//                }
-//                override fun onFailure(e: ApolloException) {
-//                    //throw error
-//                }
-//            }
-//        )
-//    }
+    fun getPokemon(name: String, callback: (PokemonDetailed?) -> Unit) {
+        apiClient.getPokemon(name).enqueue(
+            object : ApolloCall.Callback<Pokemon.Data>() {
+                override fun onResponse(response: Response<Pokemon.Data>) {
+                    callback(response.data()?.pokemon?.fragments()?.pokemonDetailed)
+                }
 
-//    private fun setText(text: TextView, value: String?) {
-//        runOnUiThread { text.text = value }
-//    }
-
+                override fun onFailure(e: ApolloException) {
+                    Log.e("POKEMON API", e.toString())
+                }
+            })
+    }
 }
