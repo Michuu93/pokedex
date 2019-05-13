@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         viewManager = LinearLayoutManager(this)
         viewAdapter = PokemonViewAdapter(pokemons, createOnClickListener())
 
-        pokemons_recycler_view.apply {
+        pokemonsRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
@@ -64,14 +64,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadPokemons() {
         loading = true
-        list_progress_bar.visibility = View.VISIBLE
+        listProgressBar.visibility = View.VISIBLE
         pokemonDatasource.getPokemons(loadCount) {
             it?.let { pokemonsList ->
                 runOnUiThread {
                     pokemons.clear()
                     pokemons.addAll(pokemonsList)
                     viewAdapter.notifyDataSetChanged()
-                    list_progress_bar.visibility = View.GONE
+                    listProgressBar.visibility = View.GONE
                     loading = false
                 }
             }
