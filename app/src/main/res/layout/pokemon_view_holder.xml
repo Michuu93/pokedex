@@ -18,7 +18,7 @@
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="match_parent" android:textSize="18sp"
-            android:textStyle="bold" android:textAlignment="viewStart" android:gravity="center_vertical"
-    />
+            android:textStyle="bold" android:gravity="center_vertical"
+            android:textColor="@color/primaryTextColor"/>
 
 </LinearLayout>
