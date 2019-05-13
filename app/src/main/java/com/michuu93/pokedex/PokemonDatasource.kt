@@ -7,7 +7,7 @@ import com.apollographql.apollo.exception.ApolloException
 import com.michuu93.pokedex.fragment.PokemonDetailed
 import com.michuu93.pokedex.fragment.PokemonSimple
 
-class PokemonHelper constructor(private val apiClient: PokemonApiClient) {
+class PokemonDatasource constructor(private val apiClient: PokemonApiClient) {
 
     fun getPokemons(first: Int, callback: (List<PokemonSimple>?) -> Unit) {
         apiClient.getPokemons(first).enqueue(
@@ -27,6 +27,19 @@ class PokemonHelper constructor(private val apiClient: PokemonApiClient) {
             object : ApolloCall.Callback<Pokemon.Data>() {
                 override fun onResponse(response: Response<Pokemon.Data>) {
                     callback(response.data()?.pokemon?.fragments()?.pokemonDetailed)
+                }
+
+                override fun onFailure(e: ApolloException) {
+                    Log.e("POKEMON API", e.toString())
+                }
+            })
+    }
+
+    fun getEvolution(name: String, callback: (PokemonSimple?) -> Unit) {
+        apiClient.getEvolution(name).enqueue(
+            object : ApolloCall.Callback<Evolution.Data>() {
+                override fun onResponse(response: Response<Evolution.Data>) {
+                    callback(response.data()?.pokemon?.fragments()?.pokemonSimple)
                 }
 
                 override fun onFailure(e: ApolloException) {

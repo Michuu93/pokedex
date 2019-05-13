@@ -10,6 +10,12 @@ query Pokemon($name: String) {
     }
 }
 
+query Evolution($name: String) {
+    pokemon(name: $name) {
+        ...PokemonSimple
+    }
+}
+
 fragment PokemonSimple on Pokemon {
     id
     name

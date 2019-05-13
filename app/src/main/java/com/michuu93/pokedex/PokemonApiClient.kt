@@ -44,4 +44,7 @@ class PokemonApiClient {
 
     fun getPokemon(name: String): ApolloQueryCall<Pokemon.Data> =
         apolloClient.query(Pokemon.builder().name(name).build())
+
+    fun getEvolution(name: String): ApolloQueryCall<Evolution.Data> =
+        apolloClient.query(Evolution.builder().name(name).build())
 }
