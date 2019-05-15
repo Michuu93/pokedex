@@ -18,6 +18,7 @@ query Evolution($name: String) {
 
 fragment PokemonSimple on Pokemon {
     id
+    number
     name
     image
 }

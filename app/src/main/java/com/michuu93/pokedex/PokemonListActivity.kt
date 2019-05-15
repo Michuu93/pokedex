@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.pokemon_view_holder.view.*
 
 
-class MainActivity : AppCompatActivity() {
+class PokemonListActivity : AppCompatActivity() {
     private var pokemonDatasource: PokemonDatasource = PokemonDatasource(PokemonApiClient())
     private var pokemons: ArrayList<PokemonSimple> = arrayListOf()
     private lateinit var viewAdapter: PokemonViewAdapter
