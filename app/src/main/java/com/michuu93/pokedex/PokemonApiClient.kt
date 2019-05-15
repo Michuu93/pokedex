@@ -12,6 +12,11 @@ import com.apollographql.apollo.cache.normalized.lru.LruNormalizedCacheFactory
 import okhttp3.OkHttpClient
 
 class PokemonApiClient {
+    companion object {
+        const val API_URL = "http://mhoja.me:5000"
+//        const val API_URL = " https://graphql-pokemon.now.sh"
+    }
+
     private var cacheFactory: NormalizedCacheFactory<*> =
         LruNormalizedCacheFactory(EvictionPolicy.builder().maxSizeBytes((10 * 1024).toLong()).build())
 
@@ -34,7 +39,7 @@ class PokemonApiClient {
     }
 
     private val apolloClient = ApolloClient.builder()
-        .serverUrl("https://graphql-pokemon.now.sh")
+        .serverUrl(API_URL)
         .normalizedCache(cacheFactory, resolver)
         .okHttpClient(OkHttpClient.Builder().build())
         .build()
