@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import com.michuu93.pokedex.fragment.PokemonSimple
 import kotlinx.android.synthetic.main.activity_main.*
@@ -26,7 +28,7 @@ class PokemonListActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         viewManager = LinearLayoutManager(this)
-        viewAdapter = PokemonViewAdapter(pokemons, createOnClickListener())
+        viewAdapter = PokemonViewAdapter(pokemons, createOnClickListener(), null, R.layout.pokemon_view_holder)
 
         pokemonsRecyclerView.apply {
             setHasFixedSize(true)
@@ -76,6 +78,21 @@ class PokemonListActivity : AppCompatActivity() {
                 }
             }
             Log.d("POKEMONS", it.toString())
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_my_pokeball -> {
+                startActivity(Intent(this, MyPokeballActivity::class.java))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }

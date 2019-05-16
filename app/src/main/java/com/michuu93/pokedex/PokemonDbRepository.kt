@@ -6,9 +6,9 @@ import com.michuu93.pokedex.PokemonDbContract.PokemonEntry.Companion.IMAGE
 import com.michuu93.pokedex.PokemonDbContract.PokemonEntry.Companion.NAME
 import com.michuu93.pokedex.PokemonDbContract.PokemonEntry.Companion.NUMBER
 import com.michuu93.pokedex.PokemonDbContract.PokemonEntry.Companion.POKEMON_TABLE_NAME
+import com.michuu93.pokedex.fragment.PokemonDetailed
 import com.michuu93.pokedex.fragment.PokemonSimple
 import org.jetbrains.anko.db.MapRowParser
-import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
 import org.jetbrains.anko.db.*
 
@@ -16,7 +16,8 @@ class PokemonDbRepository(val ctx: Context) {
     fun findAll(): ArrayList<PokemonSimple> = ctx.db.use {
         val pokemons = ArrayList<PokemonSimple>()
 
-        select(ID, NUMBER, NAME, IMAGE).parseList(object : MapRowParser<List<PokemonSimple>> {
+        select(
+            POKEMON_TABLE_NAME, ID, NUMBER, NAME, IMAGE).parseList(object : MapRowParser<List<PokemonSimple>> {
             override fun parseRow(columns: Map<String, Any?>): List<PokemonSimple> {
                 val id = columns.getValue(ID)
                 val number = columns.getValue(NUMBER)
@@ -38,8 +39,8 @@ class PokemonDbRepository(val ctx: Context) {
         pokemons
     }
 
-    fun create(pokemon: PokemonSimple) = ctx.db.use {
-        insert(
+    fun insert(pokemon: PokemonDetailed) = ctx.db.use {
+        replace(
             POKEMON_TABLE_NAME,
             ID to pokemon.id(),
             NUMBER to pokemon.number(),
@@ -48,22 +49,11 @@ class PokemonDbRepository(val ctx: Context) {
         )
     }
 
-    fun update(pokemon: PokemonSimple) = ctx.db.use {
-        update(
-            POKEMON_TABLE_NAME,
-            NUMBER to pokemon.number(),
-            NAME to pokemon.name(),
-            IMAGE to pokemon.image()
-        )
-            .whereArgs("id = {id}", ID to pokemon.id())
-            .exec()
-    }
-
-    fun delete(pokemon: PokemonSimple) = ctx.db.use {
+    fun delete(name: String) = ctx.db.use {
         delete(
             POKEMON_TABLE_NAME,
-            "id = {id}",
-            ID to pokemon.id()
+            "name = {name}",
+            NAME to name
         )
     }
 }

@@ -6,7 +6,10 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.michuu93.pokedex.fragment.PokemonDetailed
 import com.michuu93.pokedex.fragment.PokemonSimple
@@ -19,6 +22,8 @@ class PokemonDetailActivity : AppCompatActivity() {
     private var evolutionsList: ArrayList<PokemonSimple> = arrayListOf()
     private lateinit var viewAdapter: PokemonViewAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
+    private lateinit var pokemon: PokemonDetailed
+    private lateinit var dbRepository: PokemonDbRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,13 +33,16 @@ class PokemonDetailActivity : AppCompatActivity() {
         Log.d("PokemonDetailActivity", pokemonName)
 
         viewManager = LinearLayoutManager(this)
-        viewAdapter = PokemonViewAdapter(evolutionsList, createOnClickListener())
+        viewAdapter = PokemonViewAdapter(evolutionsList, createOnClickListener(), null, R.layout.pokemon_view_holder)
 
         evolutionsRecyclerView.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
         }
+
+        dbRepository = PokemonDbRepository(this)
+        pokeballButton.setOnClickListener { onAddToPokeball() }
 
         loadPokemon(pokemonName)
     }
@@ -44,12 +52,13 @@ class PokemonDetailActivity : AppCompatActivity() {
         pokemonDatasource.getPokemon(pokemonName) {
             it?.let { pokemon ->
                 runOnUiThread {
+                    this.pokemon = pokemon
                     Glide.with(this).load(pokemon.image()).into(pokemonDetailImage)
                     pokemonDetailName.text = pokemon.name()
                     content.text = pokemon.toString() //TODO content layout
                     pokemon.evolutions()?.let { evolutions -> loadEvolutions(evolutions) }
 
-                    //TODO wait for all evolution requests end
+                    //TODO wait for all evolution requests ends
                     viewAdapter.notifyDataSetChanged()
                     detailProgressBar.visibility = View.GONE
                 }
@@ -79,6 +88,31 @@ class PokemonDetailActivity : AppCompatActivity() {
             val intent = Intent(this, PokemonDetailActivity::class.java)
             intent.putExtra("pokemonName", pokemonName)
             startActivity(intent)
+        }
+    }
+
+    private fun onAddToPokeball() {
+        pokemon.let {
+            val result = dbRepository.insert(it)
+            if (result.compareTo(-1) != 0)
+                Toast.makeText(this, R.string.pokemon_saved, Toast.LENGTH_LONG).show()
+            else
+                Toast.makeText(this, R.string.pokemon_saving_error, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_my_pokeball -> {
+                startActivity(Intent(this, MyPokeballActivity::class.java))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }

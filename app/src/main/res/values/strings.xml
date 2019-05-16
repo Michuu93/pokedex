@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Pokedex</string>
+    <string name="pokemon_saved">Pokemon has been saved in your pokeball.</string>
+    <string name="pokemon_saving_error">An error occurred while saving the pokemon!</string>
+    <string name="my_pokeball">My Pokeball</string>
+    <string name="do_you_want_delete">Do you want delete</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
