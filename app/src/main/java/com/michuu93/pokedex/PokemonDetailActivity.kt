@@ -1,6 +1,7 @@
 package com.michuu93.pokedex
 
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -9,6 +10,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TableRow
+import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.michuu93.pokedex.fragment.PokemonDetailed
@@ -53,10 +56,7 @@ class PokemonDetailActivity : AppCompatActivity() {
             it?.let { pokemon ->
                 runOnUiThread {
                     this.pokemon = pokemon
-                    Glide.with(this).load(pokemon.image()).into(pokemonDetailImage)
-                    pokemonDetailName.text = pokemon.name()
-                    content.text = pokemon.toString() //TODO content layout
-                    pokemon.evolutions()?.let { evolutions -> loadEvolutions(evolutions) }
+                    setPokemonContent(pokemon)
 
                     //TODO wait for all evolution requests ends
                     viewAdapter.notifyDataSetChanged()
@@ -65,6 +65,82 @@ class PokemonDetailActivity : AppCompatActivity() {
             }
             Log.d("POKEMON", it.toString())
         }
+    }
+
+    private fun setPokemonContent(pokemon: PokemonDetailed) {
+        Glide.with(this).load(pokemon.image()).into(pokemonDetailImage)
+        pokemonDetailName.text = pokemon.name()
+        pokemonNumber.text = pokemon.number()
+
+        pokemon.weight()?.let { weight ->
+            addPokemonProperty(
+                "Weight:",
+                weight.minimum().toString() + " - " + weight.maximum().toString()
+            )
+        }
+        pokemon.height()?.let { height ->
+            addPokemonProperty(
+                "Height:",
+                height.minimum().toString() + " - " + height.maximum().toString()
+            )
+        }
+        pokemon.classification()?.let { classification -> addPokemonProperty("Classification:", classification) }
+        pokemon.types()?.let { types -> addPokemonProperty("Types:", types.joinToString(", ")) }
+        pokemon.resistant()?.let { resistant -> addPokemonProperty("Resistant:", resistant.joinToString(", ")) }
+
+        pokemon.attacks()?.let { attacks ->
+            attacks.special()?.let { specialAttacks ->
+                addPokemonProperty("Special Attacks:", null)
+                specialAttacks.forEach { specialAttack ->
+                    addPokemonProperty(
+                        specialAttack.name().toString(),
+                        specialAttack.type().toString() + " (" + specialAttack.damage().toString() + " dmg)"
+                    )
+                }
+            }
+        }
+
+        pokemon.attacks()?.let { attacks ->
+            attacks.fast()?.let { fastAttacks ->
+                addPokemonProperty("Fast Attacks:", null)
+                fastAttacks.forEach { fastAttack ->
+                    addPokemonProperty(
+                        fastAttack.name().toString(),
+                        fastAttack.type().toString() + " (" + fastAttack.damage().toString() + " dmg)"
+                    )
+                }
+            }
+        }
+
+        pokemon.fleeRate()?.let { fleeRate -> addPokemonProperty("Flee Rate:", fleeRate.toString()) }
+        pokemon.maxCP()?.let { maxCP -> addPokemonProperty("Max CP:", maxCP.toString()) }
+        pokemon.maxHP()?.let { maxHP -> addPokemonProperty("Max HP:", maxHP.toString()) }
+        pokemon.evolutionRequirements()?.let { evolutionRequirements ->
+            addPokemonProperty(
+                "Evolution Req:",
+                evolutionRequirements.name().toString() + " (" + evolutionRequirements.amount().toString() + ")"
+            )
+        }
+
+        pokemon.evolutions()?.let { evolutions -> loadEvolutions(evolutions) }
+    }
+
+    private fun addPokemonProperty(attribute: String, value: String?) {
+        val tableRow = TableRow(this)
+
+        val attributeTextView = TextView(this)
+        attributeTextView.text = attribute
+        attributeTextView.setTypeface(attributeTextView.typeface, Typeface.BOLD)
+        attributeTextView.setPadding(0, 0, 10, 0)
+        tableRow.addView(attributeTextView)
+
+        value.let {
+            val valueTextView = TextView(this)
+            valueTextView.text = value
+            tableRow.addView(valueTextView)
+        }
+
+        contentTable.addView(tableRow)
     }
 
     private fun loadEvolutions(evolutions: List<PokemonDetailed.Evolution>) {
