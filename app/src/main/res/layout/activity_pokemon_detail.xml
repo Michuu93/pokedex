@@ -7,80 +7,86 @@
         tools:context=".PokemonDetailActivity"
         android:theme="@style/AppTheme"
 >
-    <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/headerLayout"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp">
-
-        <ImageView
-                android:id="@+id/pokemonDetailImage"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ContentDescription"/>
-        <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp" app:srcCompat="@drawable/pokeball"
-                android:id="@+id/pokeballButton" style="@style/Widget.AppCompat.ImageButton"
-                android:backgroundTint="@android:color/transparent" android:cropToPadding="false"
-                android:scaleType="centerCrop"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toTopOf="parent" android:layout_marginEnd="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:ignore="ContentDescription" android:scaleX="1.5" android:scaleY="1.5"/>
-        <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/pokemonDetailImage" android:layout_marginStart="8dp"
-                android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="@+id/pokemonDetailImage"
-                android:id="@+id/nameLayout" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/pokemonNumber"
-                    android:textSize="16sp"
-                    android:textStyle="bold" android:textColor="@color/primaryTextColor"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-            />
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/pokemonDetailName"
-                    android:textSize="22sp"
-                    android:textStyle="bold" android:textColor="@color/primaryTextColor"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-            />
-        </LinearLayout>
-    </android.support.constraint.ConstraintLayout>
-    <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:id="@+id/contentTable"
-            app:layout_constraintTop_toBottomOf="@+id/headerLayout"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/evolutionsRecyclerView"
-            android:layout_marginTop="16dp" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginStart="8dp" android:layout_marginEnd="8dp"/>
-    <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:id="@+id/evolutionsRecyclerView"
-            android:layout_height="wrap_content"
-            tools:layout_editor_absoluteX="-41dp" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"/>
     <ProgressBar
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:id="@+id/detailProgressBar"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginBottom="8dp" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="@+id/contentTable"
-    />
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
+    <ScrollView
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            tools:layout_editor_absoluteY="8dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:orientation="vertical">
+            <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="8dp" android:layout_marginEnd="8dp" android:layout_marginBottom="16dp">
+
+                <ImageView
+                        android:id="@+id/pokemonDetailImage"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="ContentDescription"/>
+                <ImageButton
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" app:srcCompat="@drawable/pokeball"
+                        android:id="@+id/pokeballButton" style="@style/Widget.AppCompat.ImageButton"
+                        android:backgroundTint="@android:color/transparent" android:cropToPadding="false"
+                        android:scaleType="centerCrop"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toTopOf="parent" android:layout_marginEnd="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        tools:ignore="ContentDescription" android:scaleX="1.5" android:scaleY="1.5"/>
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/pokemonDetailImage" android:layout_marginStart="8dp"
+                        android:layout_marginBottom="8dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/pokemonDetailImage"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginEnd="8dp">
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/pokemonNumber"
+                            android:textSize="16sp"
+                            android:textStyle="bold" android:textColor="@color/primaryTextColor"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                    />
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/pokemonDetailName"
+                            android:textSize="22sp"
+                            android:textStyle="bold" android:textColor="@color/primaryTextColor"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                    />
+                </LinearLayout>
+            </android.support.constraint.ConstraintLayout>
+            <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/contentTable"
+                    android:layout_marginStart="8dp" android:layout_marginEnd="8dp" android:layout_marginBottom="8dp"/>
+            <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:id="@+id/evolutionsRecyclerView"
+                    android:layout_height="wrap_content"
+            />
+        </LinearLayout>
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>

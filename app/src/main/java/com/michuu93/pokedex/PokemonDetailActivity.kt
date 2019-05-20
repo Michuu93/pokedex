@@ -72,6 +72,10 @@ class PokemonDetailActivity : AppCompatActivity() {
         pokemonDetailName.text = pokemon.name()
         pokemonNumber.text = pokemon.number()
 
+        pokemon.types()?.let { types -> addPokemonProperty("Types:", types.joinToString(", ")) }
+        pokemon.classification()?.let { classification -> addPokemonProperty("Classification:", classification) }
+        pokemon.resistant()?.let { resistant -> addPokemonProperty("Resistant:", resistant.joinToString(", ")) }
+
         pokemon.weight()?.let { weight ->
             addPokemonProperty(
                 "Weight:",
@@ -84,9 +88,10 @@ class PokemonDetailActivity : AppCompatActivity() {
                 height.minimum().toString() + " - " + height.maximum().toString()
             )
         }
-        pokemon.classification()?.let { classification -> addPokemonProperty("Classification:", classification) }
-        pokemon.types()?.let { types -> addPokemonProperty("Types:", types.joinToString(", ")) }
-        pokemon.resistant()?.let { resistant -> addPokemonProperty("Resistant:", resistant.joinToString(", ")) }
+
+        pokemon.maxCP()?.let { maxCP -> addPokemonProperty("Max CP:", maxCP.toString()) }
+        pokemon.maxHP()?.let { maxHP -> addPokemonProperty("Max HP:", maxHP.toString()) }
+        pokemon.fleeRate()?.let { fleeRate -> addPokemonProperty("Flee Rate:", fleeRate.toString()) }
 
         pokemon.attacks()?.let { attacks ->
             attacks.special()?.let { specialAttacks ->
@@ -112,9 +117,6 @@ class PokemonDetailActivity : AppCompatActivity() {
             }
         }
 
-        pokemon.fleeRate()?.let { fleeRate -> addPokemonProperty("Flee Rate:", fleeRate.toString()) }
-        pokemon.maxCP()?.let { maxCP -> addPokemonProperty("Max CP:", maxCP.toString()) }
-        pokemon.maxHP()?.let { maxHP -> addPokemonProperty("Max HP:", maxHP.toString()) }
         pokemon.evolutionRequirements()?.let { evolutionRequirements ->
             addPokemonProperty(
                 "Evolution Req:",
